@@ -1,89 +1,107 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <title>Resume Builder</title>
-  <style>
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-  </style>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        #education,
+        #experience {
+            margin-bottom: 20px;
+        }
+
+        #education div,
+        #experience div {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #education h3,
+        #experience h3 {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <?php
-  // Initialize variables
-  $name = $email = $address = $phone = "";
-  $education = $experience = $skills = "";
+    <h1>Resume Builder</h1>
+    <form action="submit.php" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-  if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Retrieve form data
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $address = $_POST["address"];
-    $phone = $_POST["phone"];
-    $education = $_POST["education"];
-    $experience = $_POST["experience"];
-    $skills = $_POST["skills"];
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-    // TODO: Validate and process the form data
-    // ...
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
 
-    // Redirect to the preview page
-    header("Location: view_resume.php");
-    exit();
-  }
-  ?>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required>
 
-  <h1>Resume Builder</h1>
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name" value="<?php echo $name; ?>" required>
+        <h3>Education</h3>
+        <div id="education">
+            <div>
+                <label for="institute">Institute/University:</label>
+                <input type="text" id="institute" name="education[0][institute]" required>
 
-    <label for="email">Email:</label>
-    <input type="email" name="email" id="email" value="<?php echo $email; ?>" required>
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="education[0][year]" required>
 
-    <label for="address">Address:</label>
-    <input type="text" name="address" id="address" value="<?php echo $address; ?>" required>
+                <label for="degree">Degree:</label>
+                <input type="text" id="degree" name="education[0][degree]" required>
+            </div>
+        </div>
+        <button type="button" onclick="addEducation()">Add Education</button>
 
-    <label for="phone">Phone:</label>
-    <input type="text" name="phone" id="phone" value="<?php echo $phone; ?>" required>
+        <h3>Experience</h3>
+        <div id="experience">
+            <div>
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="experience[0][company]" required>
 
-    <h2>Education</h2>
-    <div id="education-container">
-      <div>
-        <label for="education-0">Institute/University:</label>
-        <input type="text" name="education[]" id="education-0" required>
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="experience[0][year]" required>
 
-        <label for="education-year-0">Year:</label>
-        <input type="text" name="education[]" id="education-year-0" required>
+                <label for="designation">Designation:</label>
+                <input type="text" id="designation" name="experience[0][designation]" required>
+            </div>
+        </div>
+        <button type="button" onclick="addExperience()">Add Experience</button>
 
-        <label for="education-degree-0">Degree:</label>
-        <input type="text" name="education[]" id="education-degree-0" required>
-      </div>
-    </div>
-    <button type="button" onclick="addEducationField()">Add Education</button>
+        <input type="submit" value="Submit">
+    </form>
 
-    <h2>Experience</h2>
-    <div id="experience-container">
-      <div>
-        <label for="experience-0">Company:</label>
-        <input type="text" name="experience[]" id="experience-0" required>
-
-        <label for="experience-year-0">Year:</label>
-        <input type="text" name="experience[]" id="experience-year-0" required>
-
-        <label for="experience-designation-0">Designation:</label>
-        <input type="text" name="experience[]" id="experience-designation-0" required>
-      </div>
-    </div>
-    <button type="button" onclick="addExperienceField()">Add Experience</button>
-
-    <h2>Skills</h2>
-    <input type="text" name="skills" id="skills" value="<?php echo $skills; ?>">
-
-    <button type="submit">Preview Resume</button>
-  </form>
-
-  <script>
-    var educationCount = 1;
-    var experienceCount = 1
+    <script>
+        function addEducation() {
+            var educationDiv = document.getElementById('education');
+            var newEducationDiv = document.createElement('div');
+            newEducationDiv.innerHTML = `
+                <label for="institute">Institute/University:</label>
